@@ -1,0 +1,8 @@
+# Ignore everything in this directory as we only need it for scaffolding
+# around the sphinx-build documenting tool.
+# This file can be safely removed once we actually place tracked
+# content within the directory.
+*
+# Except this file
+!.gitignore
+!http_server.py
