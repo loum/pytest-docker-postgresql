@@ -1,6 +1,6 @@
 include LICENSE
 include README.rst
-include pytest_docker_postgresql/docker/*.yml
+include pytest_docker_postgresql/docker/*.yml, pytest_docker_postgresql/docker/.env
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

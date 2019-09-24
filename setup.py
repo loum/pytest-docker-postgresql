@@ -51,7 +51,7 @@ setup(
     python_requires='>=3.6',
     install_requires=PACKAGES,
     packages=find_packages() + ['pytest_docker_postgresql'],
-    package_data={'pytest_docker_postgresql/docker': ['*.yml']},
+    package_data={'pytest_docker_postgresql/docker': ['*.yml', '.env']},
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',

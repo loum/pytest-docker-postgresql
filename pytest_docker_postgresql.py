@@ -2,8 +2,8 @@
 
 """
 import os
-import pytest
 import struct
+import pytest
 import pg8000
 import backoff
 from lovely.pytest.docker.compose import Services
@@ -22,6 +22,20 @@ def postgresql_docker_compose_files(pytestconfig):
     ]
 
 
+class PostgreSqlServices(Services):
+    def __init__(self, compose_files, docker_ip, project_name='pytest'):
+        self.project_directory = os.path.dirname(compose_files[0])
+        Services.__init__(self, compose_files, docker_ip, project_name)
+
+    def start(self, *services):
+        self._docker_compose.execute('--project-directory',
+                                     self.project_directory,
+                                     'up',
+                                     '--build',
+                                     '-d',
+                                     *services)
+
+
 @pytest.fixture(scope='session')
 def postgresql_docker_services(request,
                                pytestconfig,
@@ -33,9 +47,9 @@ def postgresql_docker_services(request,
     """
     keep_alive = request.config.getoption("--keepalive", False)
     project_name = "pytest{}".format(str(pytestconfig.rootdir))
-    services = Services(postgresql_docker_compose_files,
-                        docker_ip,
-                        project_name)
+    services = PostgreSqlServices(postgresql_docker_compose_files,
+                                  docker_ip,
+                                  project_name)
     yield services
     if not keep_alive:
         services.shutdown()
@@ -48,8 +62,6 @@ def pg_conn(postgresql_docker_services):
                                                 5432,
                                                 check_server=custom_service_checker)
 
-    import time
-    time.sleep(10)
 
     conn = pg8000.connect(user='postgres', password='postgres')
 

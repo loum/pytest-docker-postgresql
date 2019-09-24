@@ -37,7 +37,6 @@ coverage.xml
 .pydevproject
 
 # Local virtual environment
-.env
 venv
 2env
 3env
